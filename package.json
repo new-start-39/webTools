@@ -1,0 +1,19 @@
+{
+  "name": "webtools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "webTools",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "@koa/router": "^15.4.0",
+    "koa": "^2.16.2",
+    "koa-static": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
