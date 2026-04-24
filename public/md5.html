@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在线 MD5 计算器</title>
+  <link rel="icon" href="assets/ico.svg">
+  <link rel="stylesheet" href="css/md5.css">
+</head>
+<body>
+  <div class="container">
+    <!-- 桌面标题 -->
+    <div class="header desktop-only">
+      <h1>在线 MD5 计算器</h1>
+      <p>本地计算，安全快速</p>
+    </div>
+
+    <!-- 移动标题 -->
+    <div class="header mobile-only">
+      <h1>在线 MD5 计算器</h1>
+      <p>本地计算，安全快速</p>
+    </div>
+
+    <!-- 桌面端：上传区 + 说明卡片 并排 -->
+    <div class="top-section desktop-only">
+      <div class="upload-zone-desktop" id="upload-zone-desktop">
+        <svg class="icon"><use href="assets/icons.svg#icon-upload"></use></svg>
+        <div class="upload-text">拖拽文件到此处，或点击上传</div>
+        <div class="upload-hint">支持所有文件类型</div>
+      </div>
+
+      <div class="right-panel">
+        <div class="info-card">
+          <h3>使用说明</h3>
+          <p>选择文件后，系统将自动在本地计算 MD5 值，支持多文件并行处理。</p>
+        </div>
+        <div class="info-card">
+          <h3>隐私说明</h3>
+          <p>全程本地计算，不上传云端，放心使用。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 移动端上传区 -->
+    <div class="upload-zone-mobile mobile-only" id="upload-zone-mobile">
+      <div class="upload-circle">
+        <svg class="icon"><use href="assets/icons.svg#icon-upload"></use></svg>
+      </div>
+      <div class="upload-label">上传文件</div>
+    </div>
+
+    <!-- 隐藏的文件输入 -->
+    <input type="file" id="file-input" multiple style="display:none">
+
+    <!-- 文件列表 -->
+    <div class="list-header desktop-only">文件列表</div>
+
+    <div class="desktop-table desktop-only">
+      <table>
+        <thead>
+          <tr>
+            <th>文件名</th>
+            <th>大小</th>
+            <th>状态 / 进度</th>
+            <th>MD5 值</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="desktop-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- 移动端卡片 -->
+    <div class="mobile-cards mobile-only" id="mobile-cards"></div>
+  </div>
+
+  <script src="lib/uuidv4.min.js"></script>
+  <script src="utils/worker-pool.js"></script>
+  <script src="js/md5.js"></script>
+</body>
+</html>
