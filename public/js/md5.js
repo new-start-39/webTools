@@ -300,6 +300,53 @@ const handleFiles = (files) => {
 };
 
 /**
+ * 复制文本到剪贴板（兼容微信内置浏览器）
+ */
+const copyText = async (text) => {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // 降级处理
+    }
+  }
+
+  if (typeof document.execCommand !== 'function') {
+    return false;
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', '');
+  textarea.style.contain = 'strict';
+  textarea.style.position = 'absolute';
+  textarea.style.left = '-9999px';
+  textarea.style.fontSize = '12pt';
+
+  const previouslyFocusedElement = document.activeElement;
+  document.body.appendChild(textarea);
+
+  textarea.select();
+  textarea.selectionStart = 0;
+  textarea.selectionEnd = text.length;
+
+  let success = false;
+  try {
+    success = document.execCommand('copy');
+  } catch {
+    success = false;
+  }
+
+  document.body.removeChild(textarea);
+  if (previouslyFocusedElement) {
+    previouslyFocusedElement.focus();
+  }
+
+  return success;
+};
+
+/**
  * 复制 MD5 到剪贴板
  */
 const handleCopy = async (id) => {
@@ -308,23 +355,23 @@ const handleCopy = async (id) => {
     return;
   }
 
-  try {
-    await navigator.clipboard.writeText(target.fullHash);
-
-    target.copiedAt = Date.now();
-    if (target.copyTimer) {
-      clearTimeout(target.copyTimer);
-    }
-
-    target.copyTimer = setTimeout(() => {
-      target.copiedAt = 0;
-      renderFile(target);
-    }, 1500);
-
-    renderFile(target);
-  } catch {
+  const success = await copyText(target.fullHash);
+  if (!success) {
     alert('复制失败，请手动复制');
+    return;
   }
+
+  target.copiedAt = Date.now();
+  if (target.copyTimer) {
+    clearTimeout(target.copyTimer);
+  }
+
+  target.copyTimer = setTimeout(() => {
+    target.copiedAt = 0;
+    renderFile(target);
+  }, 1500);
+
+  renderFile(target);
 };
 
 // ==================== 事件绑定 ====================
